@@ -4,7 +4,8 @@ namespace App\Console\Commands;
 
 use App\Notifications\EventReminderNotification;
 use Illuminate\Console\Command;
-use Str;
+use Illuminate\Support\Str; 
+use App\Models\Event;
 
 class SendEventReminders extends Command
 {
@@ -20,14 +21,14 @@ class SendEventReminders extends Command
      *
      * @var string
      */
-    protected $description = 'Sends notifications to all event atttendes that event starts soon';
+    protected $description = 'Sends notifications to all event attendees that event starts soon';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $events = \App\Models\Event::with('attendees.user')
+        $events = Event::with('attendees.user')
             ->whereBetween('start_time', [now(), now()->addDay()])
             ->get();
 
